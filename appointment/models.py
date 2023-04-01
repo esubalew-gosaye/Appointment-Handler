@@ -3,18 +3,18 @@ from django.db import models
 # Create your models here.
 
 class Schedule(models.Model):
-    doctor = models.DateField()
-    time = models.TimeField()
+    sch = models.CharField(max_length=1200, blank=True, null=True)
+    date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.doctor.name + ' ' + self.date + ' ' + self.time
+        return self.sch
     
 class Doctor(models.Model):
-    name = models.CharField(max_length=200)
-    email = models.EmailField(max_length=200, required=True)
-    phone = models.CharField(max_length=200)
-    speciality = models.CharField(max_length=200)
-    schedule = models.ManyToOneRel(Schedule, blank=True)
+    name = models.CharField(max_length=200, blank=True, null=True)
+    email = models.EmailField(max_length=200)
+    phone = models.CharField(max_length=200, blank=True, null=True)
+    speciality = models.CharField(max_length=200, blank=True, null=True)
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name

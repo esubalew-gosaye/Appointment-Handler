@@ -1,0 +1,12 @@
+{
+    "sqltools.useNodeRuntime": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "database": "${workspaceFolder:Appointment_handler}/db.sqlite3",
+            "name": "Appointment_handler",
+            "group": "Appointment"
+        }
+    ]
+}
