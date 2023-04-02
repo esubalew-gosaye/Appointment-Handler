@@ -26,78 +26,43 @@
     <h1 class="title">Appointment Page</h1>
     <div class="card w-65 m-auto" style="width:65%">
         <div class="p-3">
-            <form action=""></form>
-            {% csrf_token %}
-            <select class="form-select" id="select2" aria-label="Default select example">
-                <option selected disabled>Please select doctor</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-            </select>
-            <label for="date-input">Select Date</label>
-            <input class="dpicker form-control" type="date" id="date-input" placeholder="Disabled input"
-                aria-label="input example">
-            <input type="submit" value="Submit" class="btn btn-sm btn-primary mt-3">
+            <form action="" method="post">
+                {% csrf_token %}
+                <select class="form-select" name="doctor" id="select2" aria-label="Default select example">
+                    <option selected disabled>Please select doctor</option>
+                    {% for doctor in doctors %}
+                    <option value="{{ doctor.id }}">{{ doctor.email }}</option>
+                    {% endfor %}
+                </select>
+                <label for="date-input">Select Date</label>
+                <input class="dpicker form-control" type="date" name="sp_date" id="date-input"
+                    placeholder="Disabled input" aria-label="input example">
+                <input type="submit" name="list_schedule" value="Submit" class="btn btn-sm btn-primary mt-3">
             </form>
             <div class="card-body">
                 <hr class="hr">
                 <div class="container">
                     <div class="row">
+                        {% for date in dates %}
                         <div class="col">
                             <div class="btn sm">
-                                22/03/2015
+                                {{date}}
                             </div>
-
-                            <a class="btn alert-info sm" href="#">
-                                3:00 - 3:30 PM
-                            </a>
-                            <a class="btn alert-info sm" href="#">
-                                3:00 - 3:30 PM
-                            </a>
-                            <a class="btn alert-info sm" href="#">
-                                3:00 - 3:30 PM
-                            </a>
+                            {% for schedule in schedules %}
+                                {% if schedule.date == date %}
+                                <a class="btn alert-info sm" href="#">
+                                    {{schedule.schedule}}
+                                </a>
+                                {% endif %}
+                    
+                            {% endfor %}
                         </div>
+                        {% empty %}
                         <div class="col">
                             <div class="btn sm">
-                                22/03/2015
+                                No Schedule
                             </div>
-                            <a class="btn alert-info sm" href="#">
-                                3:00 - 3:30 PM
-                            </a>
-                        </div>
-                        <div class="col">
-                            <div class="btn sm">
-                                22/03/2015
-                            </div>
-                            <a class="btn alert-info sm" href="#">
-                                3:00 - 3:30 PM
-                            </a>
-                            <a class="btn alert-info sm" href="#">
-                                3:00 - 3:30 PM
-                            </a><a class="btn alert-info sm" href="#">
-                                3:00 - 3:30 PM
-                            </a>
-                            <a class="btn alert-info sm" href="#">
-                                3:00 - 3:30 PM
-                            </a>
-                        </div>
-                        <div class="col">
-                            <div class="btn sm">
-                                22/03/2015
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="btn sm">
-                                22/03/2015
-                            </div>
-                            <a class="btn alert-info sm" href="#">
-                                3:00 - 3:30 PM
-                            </a>
-                            <a class="btn alert-info sm" href="#">
-                                3:00 - 3:30 PM
-                            </a>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

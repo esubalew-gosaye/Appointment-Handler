@@ -30,11 +30,30 @@ def add_schedule(due_date, time, doctor):
             schedule=f"{dt}:00-{dt+1}:00 {sch}", 
             date=due_date
         )
-        print(due_date, f"{dt}:00-{dt+1}:00 {sch}")
 
 
 def index(request):
-    return render(request, 'appointment/index.html', {})
+    unique_dates = []
+    list_schedlue = []
+    if request.method == 'POST':
+        if request.POST.get('list_schedule'):
+            doctor = request.POST.get('doctor')
+            date = request.POST.get('sp_date')
+
+            list_schedlue = Schedule.objects.filter(doctor=doctor)
+            if date != "":
+                list_schedlue = list_schedlue.filter(date=date)
+            for sch in list_schedlue:
+                if not sch.date in unique_dates:
+                    unique_dates.append(sch.date)
+
+            print(unique_dates, list_schedlue)
+    context = {
+        'dates': unique_dates,
+        'schedules': list_schedlue,
+        'doctors': Doctor.objects.all(),
+    }
+    return render(request, 'appointment/index.html', context)
 
 def fill_date(request):
     if request.method == 'POST':
