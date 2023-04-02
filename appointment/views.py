@@ -47,10 +47,9 @@ def index(request):
                 if not sch.date in unique_dates:
                     unique_dates.append(sch.date)
 
-            print(unique_dates, list_schedlue)
     context = {
-        'dates': unique_dates,
-        'schedules': list_schedlue,
+        'dates': sorted(unique_dates)[:6],
+        'schedules': list_schedlue.filter(is_booked=False),
         'doctors': Doctor.objects.all(),
     }
     return render(request, 'appointment/index.html', context)
@@ -65,8 +64,8 @@ def fill_date(request):
 
             rs = date_spliter(list_date)
             y, m, d = first_date.split('-')
-            
-            temp_doc = Doctor.objects.create(email=email)
+
+            temp_doc, created = Doctor.objects.get_or_create(email=email)
 
             if last_date == "":
                 add_schedule(f"{y}-{m}-{d}", rs, temp_doc)

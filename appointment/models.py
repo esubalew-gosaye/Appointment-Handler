@@ -23,3 +23,13 @@ class Schedule(models.Model):
 
     def __str__(self):
         return str(self.date) +" "+ self.doctor.email
+    
+class Patient(models.Model):
+    name = models.CharField(max_length=200, blank=True, null=True)
+    email = models.EmailField(max_length=200)
+    phone = models.CharField(max_length=15, blank=True, null=True)
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, blank=True, null=True)
+    date = models.DateField(auto_created=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.email

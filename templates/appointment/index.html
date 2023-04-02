@@ -44,13 +44,13 @@
                 <div class="container">
                     <div class="row">
                         {% for date in dates %}
-                        <div class="col">
+                        <div class="col col-md-3 col-md-4">
                             <div class="btn sm">
                                 {{date}}
                             </div>
                             {% for schedule in schedules %}
                                 {% if schedule.date == date %}
-                                <a class="btn alert-info sm" href="#">
+                                <a class="btn alert-info sm"href="#"style="display: block;">
                                     {{schedule.schedule}}
                                 </a>
                                 {% endif %}
