@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,46 +10,61 @@
     <script src="{% static 'js/bootstrap.js' %}"></script>
     <title>TeleHakim | Fill your work day</title>
 </head>
+
 <body>
     <!-- date filling form -->
-    
+
     <form action="" method="post">
         {% csrf_token %}
         <div class="w-50 m-auto">
             <h3>Please fill a time you are free to work!</h3>
             <div class="mb-3">
                 <div class="font-monospace">
-                    If your schedule is the same for the some range of dates, <span class="text-danger fw-bold">select 
-                    the initial date and final date</span> and then fill the free time in the text area below.<br>
-                    If your schedule is different for the specific dates, <span class="text-danger fw-bold">Fill only the Intial
-                    date or Specific date</span> and then fill the free time in the text area below.<br>
-                    <hr>    
-                    To fill your free time use suggested format, <span class="text-danger fw-bold">Start-time:endtime:d|n Note: don't use minute here and both n and d are case insensetive</span> <br>
-                    <span class="text-danger">3:5:d -> from morning 3:00  to 5:00, d-> refers to day, n->for night</span> <br>
-                    <span class="text-danger">10:12:d -> from 10:00  to 12:00, in afteroon</span> <br>
-                    <span class="text-danger">7:8:N -> from 7:00  to 8:00, in Night</span> <br>
-                    <span class="text-danger fw-bold mt-5">To fill all this use comma to separate: 3:5:d,10:12:d,7:8:N </span> <br>
+                    If your schedule is the same for the some range of dates, <span class="text-danger fw-bold">select
+                        the initial date and final date</span> and then fill the free time in the text area below.<br>
+                    If your schedule is different for the specific dates, <span class="text-danger fw-bold">Fill only
+                        the Intial
+                        date or Specific date</span> and then fill the free time in the text area below.<br>
+                    <hr>
+                    To fill your free time use suggested format, <span
+                        class="text-danger fw-bold">Start-time:endtime:d|n Note: don't use minute here and both n and d
+                        are case insensetive</span> <br>
+                    <span class="text-danger">3:5:d -> from morning 3:00 to 5:00, d-> refers to day, n->for night</span>
+                    <br>
+                    <span class="text-danger">10:12:d -> from 10:00 to 12:00, in afteroon</span> <br>
+                    <span class="text-danger">7:8:N -> from 7:00 to 8:00, in Night</span> <br>
+                    <span class="text-danger fw-bold mt-5">To fill all this use comma to separate: 3:5:d,10:12:d,7:8:N
+                    </span> <br>
                 </div>
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                <input required type="email" name="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                <input required type="email" name="email" class="form-control" id="exampleFormControlInput1"
+                    placeholder="name@example.com">
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlInput2" class="form-label">Intial Date or Specific Date</label>
-                <input required name="date-first" type="date" class="form-control" id="exampleFormControlInput2">
+                <input required name="date-first" type="date" class="dpicker form-control"
+                    id="exampleFormControlInput2">
             </div>
             <div class="mb-3">
                 <label for="exampleFormControlInput3" class="form-label">Final Date</label>
-                <input name="date-final" type="date" class="form-control" id="exampleFormControlInput3">
+                <input name="date-final" type="date" class="dpicker form-control" id="exampleFormControlInput3">
             </div>
-            
+
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Your Free Time</label>
                 <textarea name="date-input" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
             </div>
-                <input type="submit" name="fill_date" value="Submit" class="btn btn-primary">
+            <input type="submit" name="fill_date" value="Submit" class="btn btn-primary">
         </div>
     </form>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script type="text/javascript">
+        $('.dpicker').datepicker({
+            dateFormat: 'dd/mm/yy'
+        });
+    </script>
 </body>
+
 </html>
