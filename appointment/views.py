@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from .models import *
 import datetime
+
+
 # Create your views here.
 def date_spliter(date_list, spliter=60):
     night_schedule = []
@@ -19,40 +21,67 @@ def date_spliter(date_list, spliter=60):
                     day_schedule.append(rng)
     return day_schedule, night_schedule
 
+
 def add_schedule(due_date, time, doctor):
     sch = "Day"
-    for dt in time[0]+["."]+time[1]:
+    for dt in time[0] + ["."] + time[1]:
         if dt == ".":
             sch = "Night"
             continue
         Schedule.objects.create(
             doctor=doctor,
-            schedule=f"{dt}:00-{dt+1}:00 {sch}", 
+            schedule=f"{dt}:00-{dt + 1}:00 {sch}",
             date=due_date
         )
 
 
+# TODO Change the time format to gregorian when user selects
+
 def index(request):
     unique_dates = []
-    list_schedlue = []
-    if request.method == 'POST':
-        if request.POST.get('list_schedule'):
-            doctor = request.POST.get('doctor')
-            date = request.POST.get('sp_date')
-
-            list_schedlue = Schedule.objects.filter(doctor=doctor)
+    list_schedule = []
+    get_values = []
+    if request.method == 'GET':
+        if request.GET.get('list_schedule'):
+            doctor = request.GET.get('doctor')
+            date = request.GET.get('sp_date')
+            list_schedule = Schedule.objects.filter(doctor=doctor).filter(is_booked=False)
             if date != "":
-                list_schedlue = list_schedlue.filter(date=date)
-            for sch in list_schedlue:
+                list_schedule = list_schedule.filter(date=date)
+            for sch in list_schedule:
                 if not sch.date in unique_dates:
                     unique_dates.append(sch.date)
+    if request.method == "POST":
+        if request.POST.get('login'):
+            email = request.POST.get('email')
+            pt = Patient.objects.filter(email=email)
+            if pt.exists():
+                usr = pt[0]
+                request.session['user-name'] = usr.name
+                request.session['user-email'] = usr.email
+
+        # finally executed under GET method to deliver all values to the fronted
+        get_values = {itm: val for itm, val in request.GET.items()}
+
+    # calapi = calendarific.v2('268618031bd278a6222a52c2b261181a5868d6c3')
+    #
+    # parameters = {
+    #     'country': 'ET',
+    #     'year': 2019,
+    # }
+    #
+    # holidays = calapi.holidays(parameters)
+    # print(holidays)
 
     context = {
+        'login-status': {"email": request.session['user-email']},
         'dates': sorted(unique_dates)[:6],
-        'schedules': list_schedlue.filter(is_booked=False),
+        'schedules': list_schedule,
+        'get': get_values,
         'doctors': Doctor.objects.all(),
     }
     return render(request, 'appointment/index.html', context)
+
 
 def fill_date(request):
     if request.method == 'POST':
@@ -71,7 +100,7 @@ def fill_date(request):
                 add_schedule(f"{y}-{m}-{d}", rs, temp_doc)
             else:
                 y2, m2, d2 = last_date.split('-')
-                for rdt in range(int(d), int(d2)+1):
+                for rdt in range(int(d), int(d2) + 1):
                     add_schedule(f"{y}-{m}-{rdt}", rs, temp_doc)
-                    
+
     return render(request, 'appointment/fill_date_page.html', {})
