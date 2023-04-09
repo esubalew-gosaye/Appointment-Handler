@@ -35,7 +35,17 @@ def add_schedule(due_date, time, doctor):
         )
 
 
+def logout(request):
+    try:
+        del request.session['user-name']
+        del request.session['user-email']
+        print("THIS IS DONE HERE")
+    except KeyError:
+        print("no key found.")
+    return index(request)
+
 # TODO Change the time format to gregorian when user selects
+
 
 def index(request):
     unique_dates = []
@@ -72,9 +82,13 @@ def index(request):
     #
     # holidays = calapi.holidays(parameters)
     # print(holidays)
-
+    usr_mail = "NO USER LOGGED IN"
+    try:
+        usr_mail = request.session['user-email']
+    except KeyError:
+        pass
     context = {
-        'login-status': {"email": request.session['user-email']},
+        'login_status': {"email": usr_mail},
         'dates': sorted(unique_dates)[:6],
         'schedules': list_schedule,
         'get': get_values,

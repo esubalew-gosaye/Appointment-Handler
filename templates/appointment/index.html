@@ -91,12 +91,13 @@
             <input class="form-control" type="email" name="email" id="email-input"
                    placeholder="Email here" value="" aria-label="input example">
             <input type="submit" name="login" value="Submit" class="btn btn-sm btn-primary mt-3">
+            <input type="button" name="remove" onclick="logout()" value="Logout" class="btn btn-sm btn-danger mt-3">
         </form>
         <div class="card-body">
             <div class="container">
                 <div class="row">
                     <div>
-                        <small><b>You logged in as:</b> esubalew</small>
+                        <small><b>You logged in as:</b> {{ login_status.email }}</small>
                     </div>
                 </div>
             </div>
@@ -104,6 +105,12 @@
 
     </div>
 <script src="{% static 'js/jquery.min.js' %}"></script>
+<script>
+    function logout(){
+        let url = "127.0.0.1/logout";
+
+    }
+</script>
 </body>
 
 </html>
