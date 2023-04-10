@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import *
 import datetime
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 
 # Create your views here.
@@ -39,10 +40,10 @@ def logout(request):
     try:
         del request.session['user-name']
         del request.session['user-email']
-        print("THIS IS DONE HERE")
     except KeyError:
         print("no key found.")
-    return index(request)
+    return HttpResponse("es")
+
 
 # TODO Change the time format to gregorian when user selects
 
@@ -71,15 +72,13 @@ def index(request):
                 request.session['user-email'] = usr.email
 
         # finally executed under GET method to deliver all values to the fronted
-        get_values = {itm: val for itm, val in request.GET.items()}
+    get_values = {itm: val for itm, val in request.GET.items()}
 
     # calapi = calendarific.v2('268618031bd278a6222a52c2b261181a5868d6c3')
-    #
     # parameters = {
     #     'country': 'ET',
     #     'year': 2019,
     # }
-    #
     # holidays = calapi.holidays(parameters)
     # print(holidays)
     usr_mail = "NO USER LOGGED IN"
@@ -95,6 +94,25 @@ def index(request):
         'doctors': Doctor.objects.all(),
     }
     return render(request, 'appointment/index.html', context)
+
+
+@xframe_options_exempt
+def schedule(request):
+    do_id = request.GET.get("doctor")
+    da_id = request.GET.get('date_')
+    pt = Patient.objects.filter(
+        email=request.session.get('user-email')
+    )
+    if pt.exists():
+        sch = Schedule.objects.get(id=da_id, doctor=do_id)
+        print(do_id, da_id, sch)
+        sch.is_booked = True
+        pt[0].schedule = sch
+        sch.save(update_fields=['is_booked'])
+        pt[0].save(update_fields=['schedule'])
+    else:
+        print("no user logged in")
+    return HttpResponseRedirect(f"/?doctor={do_id}")
 
 
 def fill_date(request):
