@@ -105,11 +105,10 @@ def schedule(request):
     )
     if pt.exists():
         sch = Schedule.objects.get(id=da_id, doctor=do_id)
-        print(do_id, da_id, sch)
+        sch.scheduled_by = pt[0]
         sch.is_booked = True
-        pt[0].schedule = sch
-        sch.save(update_fields=['is_booked'])
-        pt[0].save(update_fields=['schedule'])
+        sch.save(update_fields=['is_booked', 'scheduled_by'])
+
     else:
         print("no user logged in")
     return HttpResponseRedirect(f"/?doctor={do_id}")

@@ -21,20 +21,29 @@ class Patient(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True)
     email = models.EmailField(max_length=200)
     phone = models.CharField(max_length=15, blank=True, null=True)
-    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, blank=True, null=True)
     date = models.DateField(auto_created=True, blank=True, null=True)
 
     def __str__(self):
         return self.email
 
+
 class Schedule(models.Model):
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, blank=True, null=True)
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, blank=True, null=True)
     schedule = models.CharField(max_length=200, blank=True, null=True)
     date = models.DateField(blank=True, null=True)
-    scheduled_by = models.ForeignKey(Patient, blank=True, null=True)
+    scheduled_by = models.ForeignKey(Patient, on_delete=models.SET_NULL, blank=True, null=True)
     is_booked = models.BooleanField(default=False)
 
     def __str__(self):
         return str(self.date) + " " + self.doctor.email + " " + self.schedule
+
+
+
+
+
+
+
+
+
 
 
