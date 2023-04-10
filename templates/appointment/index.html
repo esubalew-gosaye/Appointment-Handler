@@ -25,17 +25,17 @@
 <body>
 <h1 class="title">Appointment Page </h1>
 
-<div class="card w-65 m-lg-5" style="width:65%; display: inline-flex">
+<div class="card m-lg-5" style="width:55%; display: inline-flex">
     <div class="p-3">
         <form action="" method="get">
-{#                                {% for doctor in doctors %}#}
-{#                                    <div class="btn alert-secondary">{{ doctor.id }} | {{ get }}</div>#}
-{#                                    {% if doctor.id == get.doctor|add:'0' %}#}
-{#                                        <div class="btn alert-warning">#}
-{#                                            NAME#}
-{#                                        </div>#}
-{#                                    {% endif %}#}
-{#                                {% endfor %}#}
+            {#                                {% for doctor in doctors %}#}
+            {#                                    <div class="btn alert-secondary">{{ doctor.id }} | {{ get }}</div>#}
+            {#                                    {% if doctor.id == get.doctor|add:'0' %}#}
+            {#                                        <div class="btn alert-warning">#}
+            {#                                            NAME#}
+            {#                                        </div>#}
+            {#                                    {% endif %}#}
+            {#                                {% endfor %}#}
 
             <select class="form-select" name="doctor" id="select2" aria-label="Default select example">
                 <option selected disabled>Please select doctor</option>
@@ -64,7 +64,9 @@
                             </div>
                             {% for schedule in schedules %}
                                 {% if schedule.date == date %}
-                                    <a class="btn alert-info sm" href="/schedule/?doctor={{ get.doctor }}&date_={{ schedule.id }}" style="display: block;">
+                                    <a class="btn alert-info sm"
+                                       href="/schedule/?doctor={{ get.doctor }}&date_={{ schedule.id }}"
+                                       style="display: block;">
                                         {{ schedule.schedule }}
                                     </a>
                                 {% endif %}
@@ -84,29 +86,54 @@
 
     </div>
 </div>
-<div class="card w-25 mt-5 me-3" style="float: right;">
-        <form action="" method="post" class="p-4">
-            {% csrf_token %}
-            <label for="email-input">Email: </label>
-            <input class="form-control" type="email" name="email" id="email-input"
-                   placeholder="Email here" value="" aria-label="input example">
-            <input type="submit" name="login" value="Login" class="btn btn-sm btn-primary mt-3">
-            <input type="button" name="remove" onclick="logout()" value="Logout" class="btn btn-sm btn-danger mt-3">
-        </form>
-        <div class="card-body">
-            <div class="container">
-                <div class="row">
-                    <div>
-                        <small><b>You logged in as:</b> {{ login_status.email }}</small>
-                    </div>
+<div class="card mt-5 me-3" style="float: right;width: 35%">
+    <form action="" method="post" class="p-4">
+        {% csrf_token %}
+        <label for="email-input">Email: </label>
+        <input class="form-control" type="email" name="email" id="email-input"
+               placeholder="Email here" value="" aria-label="input example">
+        <input type="submit" name="login" value="Login" class="btn btn-sm btn-primary mt-3">
+        <input type="button" name="remove" onclick="logout()" value="Logout" class="btn btn-sm btn-danger mt-3">
+    </form>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div>
+                    <small><b>You logged in as:</b> {{ login_status.email }}</small>
                 </div>
             </div>
         </div>
-
     </div>
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Doctor</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for sc in user_schedule %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ sc.date }}</td>
+                            <td>{{ sc.doctor.email }}</td>
+                            <td>{{ sc.schedule }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="{% static 'js/jquery.min.js' %}"></script>
 <script>
-    async function logout(){
+    async function logout() {
         const response = await fetch("http://127.0.0.1:8000/logout/");
         const jsonData = response.ok;
         window.location.href = "http://127.0.0.1:8000/"

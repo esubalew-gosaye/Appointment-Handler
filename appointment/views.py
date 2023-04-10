@@ -87,6 +87,7 @@ def index(request):
     except KeyError:
         pass
     context = {
+        'user_schedule': Schedule.objects.filter(scheduled_by__email=usr_mail),
         'login_status': {"email": usr_mail},
         'dates': sorted(unique_dates)[:6],
         'schedules': list_schedule,
