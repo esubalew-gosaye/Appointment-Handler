@@ -29,11 +29,14 @@ def add_schedule(due_date, time, doctor):
         if dt == ".":
             sch = "Night"
             continue
-        Schedule.objects.create(
-            doctor=doctor,
-            schedule=f"{dt}:00-{dt + 1}:00 {sch}",
-            date=due_date
-        )
+        _ls = Schedule.objects.filter(doctor=doctor, schedule__exact=f"{dt}:00-{dt + 1}:00 {sch}")
+
+        if not _ls.exists():
+            Schedule.objects.create(
+                doctor=doctor,
+                schedule=f"{dt}:00-{dt + 1}:00 {sch}",
+                date=due_date
+            )
 
 
 def logout(request):
